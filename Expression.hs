@@ -82,6 +82,7 @@ evalExpr mem = foldExpr (fVar mem) fConst fBinary fUnary
       (OpOr, VBool a, VBool b) -> VBool (a || b)
       (OpEqual, _, _) -> VBool (v1 == v2)
       (OpLessThan, VInteger a, VInteger b) -> VBool (a < b)
+      (_, _, _) -> VInteger 0
     fUnary :: OpUnary -> Value -> Value
     fUnary op v = case (op, v) of
       (OpMinus, VInteger a) -> VInteger (-a)
@@ -125,8 +126,18 @@ test3 = evalExpr mem expr == expectedValue
     expr = ExprBinary OpAdd (ExprConst (VBool False)) (ExprConst (VInteger 3))
     expectedValue = VInteger 0
 
+test4 :: Bool
+test4 = evalExpr mem expr == expectedValue
+  where
+    mem = emptyMem
+    expr = ExprBinary OpAnd (ExprConst (VBool True)) (ExprConst (VInteger 10))
+    expectedValue = VInteger 0
+
 main :: IO ()
 main = do
+  print test0
   print test1
   print test2
   print test3
+  print test4
+
