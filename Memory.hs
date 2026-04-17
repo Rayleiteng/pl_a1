@@ -89,7 +89,6 @@ eq (MkMem []) _ = False
 eq _ (MkMem []) = False
 eq (MkMem ((n1, v1) : ns1)) (MkMem ((n2, v2) : ns2)) = (n1 == n2) && (v1 == v2) && eq (MkMem ns1) (MkMem ns2)
 
-equalLists _ _ = False
 
 test1 :: Mem
 test1 =
