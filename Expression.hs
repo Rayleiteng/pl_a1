@@ -90,7 +90,6 @@ evalExpr mem = foldExpr (fVar mem) fConst fBinary fUnary
 --------------------------------------------------------------------------------
 
 -- Exercise 2.e
---
 -- Write at least three more tests.
 -- The tests should return True in case of success.
 
