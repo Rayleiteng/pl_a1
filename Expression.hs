@@ -140,14 +140,3 @@ test5 = evalExpr mem expr == expectedValue
     mem = emptyMem
     expr = ExprUnary OpMinus (ExprConst (VBool True))
     expectedValue = VInteger 0
-
-
-main :: IO ()
-main = do
-  print test0
-  print test1
-  print test2
-  print test3
-  print test4
-  print test5
-
