@@ -80,7 +80,8 @@ evalExpr mem = foldExpr (fVar mem) fConst fBinary fUnary
       (OpMultiply, VInteger a, VInteger b) -> VInteger (a * b)
       (OpAnd, VBool a, VBool b) -> VBool (a && b)
       (OpOr, VBool a, VBool b) -> VBool (a || b)
-      (OpEqual, _, _) -> VBool (v1 == v2)
+      (OpEqual,  VInteger a, VInteger b) -> VBool (v1 == v2)
+      (OpEqual,  VBool a, VBool b) -> VBool (v1 == v2)
       (OpLessThan, VInteger a, VInteger b) -> VBool (a < b)
       (_, _, _) -> VInteger 0
     fUnary :: OpUnary -> Value -> Value
@@ -106,13 +107,6 @@ test1 :: Bool
 test1 = evalExpr mem expr == expectedValue
   where
     mem = storeMem "x" (VInteger 2) emptyMem
-    expr = ExprBinary OpMultiply (ExprConst (VInteger 3)) (ExprVar "x")
-    expectedValue = VInteger 6
-
-test2 :: Bool
-test2 = evalExpr mem expr == expectedValue
-  where
-    mem = storeMem "x" (VInteger 2) emptyMem
     expr =
       ExprBinary
         OpEqual
@@ -120,22 +114,22 @@ test2 = evalExpr mem expr == expectedValue
         (ExprConst (VInteger 6))
     expectedValue = VBool True
 
-test3 :: Bool
-test3 = evalExpr mem expr == expectedValue
+test2 :: Bool
+test2 = evalExpr mem expr == expectedValue
   where
     mem = emptyMem
-    expr = ExprBinary OpAdd (ExprConst (VBool False)) (ExprConst (VInteger 3))
+    expr = ExprBinary OpEqual (ExprConst (VBool False)) (ExprConst (VInteger 3))
     expectedValue = VInteger 0
 
-test4 :: Bool
-test4 = evalExpr mem expr == expectedValue
+test3 :: Bool
+test3 = evalExpr mem expr == expectedValue
   where
     mem = emptyMem
     expr = ExprBinary OpAnd (ExprConst (VBool True)) (ExprConst (VInteger 10))
     expectedValue = VInteger 0
 
-test5 :: Bool
-test5 = evalExpr mem expr == expectedValue
+test4 :: Bool
+test4 = evalExpr mem expr == expectedValue
   where
     mem = emptyMem
     expr = ExprUnary OpMinus (ExprConst (VBool True))

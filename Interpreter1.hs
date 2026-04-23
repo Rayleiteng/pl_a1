@@ -76,19 +76,27 @@ test0 = loadMem "r" finalMem == expectedValue
     expectedValue = VInteger 128
 
 test1 :: Bool
-test1 = loadMem "r" finalMem == VInteger 1
+test1 = loadMem "r" finalMem == expectedValue
+  where
+    initialMem = storeMem "n" (VInteger 5) emptyMem
+    finalMem = executeStmt factorial initialMem
+    expectedValue = VInteger 120
+
+test2 :: Bool
+test2 = loadMem "r" finalMem == expectedValue
+  where
+    stmt =
+      StmtIf
+        (ExprBinary OpLessThan (ExprConst (VInteger 0)) (ExprVar "n"))
+        (StmtAssign "r" (ExprConst (VInteger 1)))
+        (StmtAssign "r" (ExprConst (VInteger 0)))
+    initialMem = storeMem "n" (VInteger 10) emptyMem
+    finalMem = executeStmt stmt initialMem
+    expectedValue = VInteger 1
+
+test3 :: Bool
+test3 = loadMem "r" finalMem == expectedValue
   where
     initialMem = storeMem "n" (VInteger 0) emptyMem
     finalMem = executeStmt twoToThePowerOfN initialMem
-
-test2 :: Bool
-test2 = loadMem "r" finalMem == VInteger 8
-  where
-    initialMem = storeMem "n" (VInteger 3) emptyMem
-    finalMem = executeStmt twoToThePowerOfN initialMem
-
-test3 :: Bool
-test3 = loadMem "r" finalMem == VInteger 32
-  where
-    initialMem = storeMem "n" (VInteger 5) emptyMem
-    finalMem = executeStmt twoToThePowerOfN initialMem
+    expectedValue = VInteger 1

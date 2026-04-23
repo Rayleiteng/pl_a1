@@ -90,21 +90,3 @@ eq _ (MkMem []) = False
 eq (MkMem ((n1, v1) : ns1)) (MkMem ((n2, v2) : ns2)) = (n1 == n2) && (v1 == v2) && eq (MkMem ns1) (MkMem ns2)
 
 
-test1 :: Mem
-test1 =
-  storeMem
-    "a"
-    (VInteger 2)
-    ( storeMem
-        "c"
-        (VInteger 10)
-        ( storeMem
-            "b"
-            (VBool True)
-            ( storeMem "a" (VInteger 1) emptyMem
-            )
-        )
-    )
-
-test2 :: Mem
-test2 = emptyMem
